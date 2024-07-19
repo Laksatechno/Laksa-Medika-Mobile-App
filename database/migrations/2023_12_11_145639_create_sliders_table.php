@@ -32,5 +32,6 @@ public function up()
     public function down()
     {
         Schema::dropIfExists('sliders');
+        
     }
 }

@@ -7,14 +7,14 @@
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <title>Laksa Medika</title>
-    <meta name="description" content="Mobilekit HTML Mobile UI Kit">
-    <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
-    <link rel="icon" type="image/png" href="{{ URL::asset('assets/images/icon.png')}}" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('assets/images/icon.png')}}">
-    <link rel="stylesheet" href="{{ URL::asset('asset/css/style.css')}}">
-    <link rel="manifest" href="__manifest.json">
+    <meta name="theme-color" content="#004AAD">
+    <title>Laksa Medika Internusa</title>
+    <meta name="description" content="Laksa Medika Internusa">
+    <meta name="keywords" content="LAKSA MEDIKA INTERNUSA, laksa medika internusa, bloodbag, hemoglobin, yofalab, html" />
+    <link rel="icon" type="image/png" href="{{ asset('icon-512.png') }}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icon-512.png') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
 </head>
 
 <body class="bg-white">
@@ -31,25 +31,26 @@
 
         <div class="login-form mt-1">
             <div class="section">
-                <img src="{{ URL::asset('assets/images/icon.png')}}" alt="image" class="form-image">
+                <img src="{{ asset('assets/img/icon.webp') }}" alt="laksamedika" class="form-image">
             </div>
             <div class="section mt-1">
-                <h1>Laksa Medika</h1>
-                {{-- <h4>Silahkan Login...</h4> --}}
+                <h1>LAKSA MEDIKA INTERNUSA</h1>
+                {{-- <h4>Silahkan Login</h4> --}}
             </div>
             <div class="section mt-1 mb-5">
-                <form method="POST" action="{{ route('login') }}">
+                @php
+                    $messagewarning = Session::get('warning');
+                @endphp
+                @if (Session::get('warning'))
+                    <div class="alert alert-outline-warning">
+                        {{ $messagewarning }}
+                    </div>
+                @endif
+                <form action="{{ route('login') }}" method="POST">
                     @csrf
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
@@ -58,38 +59,22 @@
 
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <label for="password" >{{ __('Password') }}</label>
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <i class="clear-input">
-                                <ion-icon name="close-circle"></ion-icon>
-                            </i>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password">
+                            <div class="icon-right" style="position: absolute; right:8px; top:10px">
+                                <ion-icon name="eye-off-outline" id="show_hide_password"
+                                    style="font-size: 1.5rem"></ion-icon>
+                            </div>
                         </div>
                     </div>
-            
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                            <label class="form-check-label" for="remember">
-                                {{ __('Remember Me') }}
-                            </label>
-                        </div>
-                    
-                
                     <div class="form-links mt-2">
-                        <div>
-                            <a href="{{ route('register') }}">Daftar Sekarang</a>
-                        </div>
-                        <div><a href="{{ route('password.request') }}" class="text-muted">Lupa Password?</a></div>
+                        <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
+                        <div><a href="{{ route('register') }}" class="text-muted">Register</a></div>
                     </div>
 
                     <div class="form-button-group">
-                        <button type="submit" class="btn btn-success btn-block btn-lg">{{ __('Login') }}</button>
+                        <button type="submit" class="btn btn-success btn-block btn-lg">Log in</button>
                     </div>
 
                 </form>
@@ -100,23 +85,52 @@
     </div>
     <!-- * App Capsule -->
 
+    <script>
+        var BASE_URL = "{{ url('/') }}/";
+        //alert(BASE_URL);
+        document.addEventListener('DOMContentLoaded', init, false);
 
+        function init() {
+            if ('serviceWorker' in navigator && navigator.onLine) {
+                navigator.serviceWorker.register(BASE_URL + 'service-worker.js')
+                    .then((reg) => {
+                        console.log('Registrasi service worker Berhasil', reg);
+                    }, (err) => {
+                        console.error('Registrasi service worker Gagal', err);
+                    });
+            }
+        }
+    </script>
 
     <!-- ///////////// Js Files ////////////////////  -->
     <!-- Jquery -->
-    <script src="{{ URL::asset('asset/js/lib/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{ asset('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
     <!-- Bootstrap-->
-    <script src="{{ URL::asset('asset/js/lib/jquery-3.4.1.min.js')}}"></script>
-    <script src="{{ URL::asset('asset/js/lib/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('assets/js/lib/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib/bootstrap.min.js') }}"></script>
     <!-- Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
     <!-- Owl Carousel -->
-    <script src="{{ URL::asset('asset/js/plugins/owl-carousel/owl.carousel.min.js')}}"></script>
+    <script src="{{ asset('assets/js/plugins/owl-carousel/owl.carousel.min.js') }}"></script>
     <!-- jQuery Circle Progress -->
-    <script src="{{ URL::asset('asset/js/plugins/jquery-circle-progress/circle-progress.min.js')}}"></script>
+    <script src="{{ asset('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
     <!-- Base Js File -->
-    <script src="{{ URL::asset('asset/js/base.js')}}"></script>
+    <script src="{{ asset('assets/js/base.js') }}"></script>
 
+    <script>
+        $(function() {
+            $("#show_hide_password").click(function(e) {
+                e.preventDefault();
+                if ($("#password").attr("type") == "text") {
+                    $("#password").attr("type", "password");
+                    $("#show_hide_password").attr("name", "eye-off-outline");
+                } else if ($("#password").attr("type") == "password") {
+                    $("#password").attr("type", "text");
+                    $("#show_hide_password").attr("name", "eye-outline");
+                }
+            });
+        });
+    </script>
 
 </body>
 

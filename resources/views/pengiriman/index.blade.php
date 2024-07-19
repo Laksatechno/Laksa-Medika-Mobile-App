@@ -1,68 +1,98 @@
-@extends('layouts.master')
-
-@section('content')
-@include('layouts.topNavBack')
-
-<div class="section full mt-2">
-        <div class="section-title">Pengiriman</div>
-        {{-- <div class="content-header mb-05">Make time by adding <code>.time</code> and times.</div> --}}
-                   @foreach($pengirimans as $pengiriman)
-        <div class="wide-block">
-            <!-- timeline -->
- 
-            <div class="timeline timed">
-                <div class="item">
-                    <span class="time"> {{ $pengiriman->created_at}}</span>
-                    <div class="dot bg-success"></div>
-                    <div class="content">
-                        <h4 class="title">Invoice :                          
-                        @if ($pengiriman->invoice)
-                                {{ $pengiriman->invoice->no_faktur_2023 }}
-                            @else
-                                N/A
-                            @endif</h4>
-                        <div class="text">Qty : {{ $pengiriman->qty }}</div>
-                        <div class="text">Status : {{ $pengiriman->status}}</div>
-                        
-                        @if ($pengiriman->status === 'Dikirim')
-                        <div class="text">Dikirim</div>
-                    @endif
-                    </div>
-                </div>
-                {{-- <div class="item">
-                    <span class="time">1:30 PM</span>
-                    <div class="dot bg-danger"></div>
-                    <div class="content">
-                        <h4 class="title">Meet up</h4>
-                        <div class="text">
-                            <img src="assets/img/sample/avatar/avatar3.jpg" alt="avatar" class="imaged w24 rounded">
-                            <img src="assets/img/sample/avatar/avatar4.jpg" alt="avatar" class="imaged w24 rounded">
-                            <img src="assets/img/sample/avatar/avatar5.jpg" alt="avatar" class="imaged w24 rounded">
-                            <img src="assets/img/sample/avatar/avatar7.jpg" alt="avatar" class="imaged w24 rounded">
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <span class="time">04:40 PM</span>
-                    <div class="dot bg-warning"></div>
-                    <div class="content">
-                        <h4 class="title">Party Night</h4>
-                        <div class="text">Get a ticket for party at tonight 9:00 PM</div>
-                    </div>
-                </div>
-                <div class="item">
-                    <span class="time">06:00 PM</span>
-                    <div class="dot bg-info"></div>
-                    <div class="content">
-                        <h4 class="title">New Release</h4>
-                        <div class="text">Export the version 2.3</div>
-                    </div>
-                </div> --}}
-            </div>
-            <!-- * timeline -->
-            @endforeach
-        </div>
-
-    </div>
-    @endsection
-
+@extends('layouts.master')
+
+@section('header')
+<!-- App Header -->
+<div class="appHeader bg-purple text-light">
+    <div class="left">
+        <a href="/home" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">PENGIRIMAN</div>
+    <div class="right"></div>
+</div>
+<!-- * App Header -->
+@endsection
+
+@section('content')
+<div class="section" style="margin-top: 40px; margin-bottom: 45px">
+    <div class="section-title">Pengiriman Masih Pengembangan Menu</div>
+    @foreach ($pengirimans as $item)
+    <div class="wide-block">
+        <div class="card-body">
+            <div class="historicontent">
+                <div class="iconpresensi">
+                    <ion-icon name="checkmark" style="font-size: 30px; color:rgb(237, 128, 5)"></ion-icon>
+                </div>
+                <div class="datapenawaran">
+                    <h5 style="line-height: 5px">No Invoice : {{ $item->invoice_id }}</h5>
+                    <h5 style="line-height: 5px">Customer : PMI SLEMAN</h5>
+                    <!-- link text Lihat Detail -->
+                    <h5 style="line-height: 5px" id="toggleTimeline"><span class="badge badge-primary">Lihat Detail Pengiriman</span></h5>
+                </div>
+                <div class="status">
+                    <h5 style="line-height: 5px"><span class="badge badge-success">Sudah Sampai</span></h5>
+                </div>
+            </div>
+        </div>
+        <!-- timeline -->
+        <div class="timeline timed" id="timeline" style="display: none;">
+            <div class="item">
+                <span class="time">9 Jul 14:26</span>
+                <div class="dot bg-success"></div>
+                <div class="content">
+                    <h4 class="title">Pesanan Sudah Sampai</h4>
+                    <div class="text">Pesanan Sudah Diterima</div>
+                </div>
+            </div>
+            <div class="item">
+                <span class="time">9 Jul 14:26</span>
+                <div class="dot bg-success"></div>
+                <div class="content">
+                    <h4 class="title">Pesanan dalam Pengiriman</h4>
+                    <div class="text">Pesanan sedang dalam perjalanan menuju ke PMI SLEMAN</div>
+                </div>
+            </div>
+            <div class="item">
+                <span class="time">8 Jul 10:23</span>
+                <div class="dot bg-success"></div>
+                <div class="content">
+                    <h4 class="title">Pesanan telah diserahkan ke Logistik untuk diproses</h4>
+                </div>
+            </div>
+            <div class="item">
+                <span class="time">7 Jul 09:58</span>
+                <div class="dot bg-success"></div>
+                <div class="content">
+                    <h4 class="title">Pesanan Dibuat</h4>
+                    <div class="text">Invoice: {{ $item->invoice_id }} Dalam Proses Administrasi</div>
+                </div>
+                
+            </div>
+            
+        </div>
+        <!-- * timeline -->
+    </div>
+    @endforeach
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleTimeline = document.getElementById('toggleTimeline');
+        const timeline = document.getElementById('timeline');
+        
+        if (toggleTimeline && timeline) {
+            toggleTimeline.addEventListener('click', function() {
+                if (timeline.style.display === 'none') {
+                    timeline.style.display = 'block';
+                    toggleTimeline.innerHTML = '<span class="badge badge-primary">Tutup Detail Pengiriman</span>';
+                } else {
+                    timeline.style.display = 'none';
+                    toggleTimeline.innerHTML = '<span class="badge badge-primary">Lihat Detail Pengiriman</span>';
+                }
+            });
+        }
+    });
+</script>
+
+@endsection

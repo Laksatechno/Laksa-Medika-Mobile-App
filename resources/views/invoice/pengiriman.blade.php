@@ -72,8 +72,8 @@
                                     <thead>
                                         <tr>
                                             <td>#</td>
-                                            <td>Product</td>
-                                            <td>Quantity</td>
+                                            <td>Produk</td>
+                                            <td>Qty</td>
                                         </tr>
                                     </thead>
                                     
@@ -136,7 +136,7 @@
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td class="text-center" colspan="6">Empty Data</td>
+                                                <td class="text-center" colspan="6">Data Tidak Ada</td>
                                             </tr>
                                             @endforelse
                                         </tbody>
@@ -151,7 +151,7 @@
                                             <label for="">Product</label>
                                             <input type="hidden" name="_method" value="PUT" class="form-control">
                                             <select name="invoice_detail_id" id="product_ajax" class="form-control">
-                                                <option value="">Select Product</option>
+                                                <option value="">Pilih Produk</option>
                                                 @foreach ($invoice->detail as $detail)
                                                     <option value="{{ $detail->id }}"> {{ $detail->product_detail->product->title}}</option>
                                                 @endforeach

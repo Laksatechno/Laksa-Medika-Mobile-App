@@ -308,6 +308,7 @@ class InvoiceppnController extends Controller
                     'invoice_detailppn_id' => $request->invoice_detailppn_id,
                     'qty' => $request->qty,
                 ]);
+                
             }
             $invoice_detailppn->qty -= $request->qty;
             $invoice_detailppn->save();

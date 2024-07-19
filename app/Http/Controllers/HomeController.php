@@ -132,7 +132,9 @@ class HomeController extends Controller
         $allinvoiceppn  = Invoiceppn::with(['user', 'customer', 'detailppn'])->orderBy('created_at', 'DESC')->get();;
         $allinvoice  = Invoice::with(['user', 'customer', 'detail'])->orderBy('created_at', 'DESC')->get();;
         $invoicecustomerall = Invoice_customer::with(['user', 'detail_customer'])->orderBy('created_at', 'DESC')->get();;
-        return view('beranda.menuinvoice', compact('allinvoice','allinvoiceppn','invoicecustomerall'));
+        //count table invoice_customer status Menunggu Pembayaran
+        $data = Invoice_customer::all()->where('status', 'Menunggu Pembayaran')->count();
+        return view('beranda.menuinvoice', compact('allinvoice','allinvoiceppn','invoicecustomerall','data'));
         // Logika untuk menampilkan data invoice non PPN
         // return view('beranda.menuinvoice');
 

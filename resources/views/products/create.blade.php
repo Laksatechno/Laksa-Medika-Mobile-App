@@ -1,14 +1,25 @@
 @extends('layouts.master')
 
 @section('content')
-@include('layouts.topNavBack')
+@section('header')
+
+    <!-- App Header -->
+    <div class="appHeader bg-purple text-light">
+        <div class="left">
+            <a href="/home" class="headerButton goBack">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">Produk</div>
+        <div class="right"></div>
+    </div>
+    <!-- * App Header -->
+
+    @endsection
     <div class="container">
         <div class="row" style="margin-top: 2cm; margin-bottom: 2cm">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <b class="card-title">Tambah Produk</b>
-                    </div>
                     <div class="card-body">
                         @if (session('error'))
                             <div class="alert alert-danger">
@@ -19,7 +30,7 @@
                         <form action="{{ url('/product') }}" method="post">
                             @csrf
                             <div class="form-group">
-                                <label for="">Name</label>
+                                <label for="">Nama</label>
                                 <input type="text" name="title" class="form-control {{ $errors->has('title') ? 'is-invalid':'' }}" placeholder="Nama Produk" required>
                                 <p class="text-danger">{{ $errors->first('title') }}</p>
                             </div>
@@ -42,7 +53,7 @@
                                 @csrf
                                         <label for="">Customer Reguler</label>
                                         <select class="select1 form-control" id="customer_id" name="customer_id" class="form-control">
-                                            <option value="">-- Select --</option>
+                                            <option value="">-- PILIH CUSTOMER --</option>
                                             @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}">{{ $customer->name }} - {{ $customer->email }}
                                             </option>
@@ -59,7 +70,7 @@
                                 @csrf
                                         <label for="">Customer Langsung</label>
                                         <select class="select2 form-control" id="select2" name="user_id" class="form-control">
-                                            <option value="">-- Select --</option>
+                                            <option value="">-- PILIH CUSTOMER --</option>
                                             @foreach ($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }} - {{ $user->email }}
                                             </option>
@@ -67,7 +78,7 @@
                                         </select>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-danger btn-sm">Save</button>
+                                <button class="btn btn-primary btn-sm btn-block">SIMPAN</button>
                             </div>
                         </form>
                         <script>

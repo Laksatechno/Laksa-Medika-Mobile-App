@@ -1,63 +1,120 @@
 @extends('layouts.master')
 @section('content')
-@include('layouts.topNavBack')
-<div class="container">
-    <div class="row" style="margin-top: 80px; ">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row" style="margin-bottom: 100px">
-                        <div class="col-md-12">
-                        <div class="col-md-6">
-                            <b class="card-title"> Brosur</b>
-                        </div>
-                            <a href="{{ route('brochures.create') }}" class="btn btn-success"><span class="mdi mdi-file-plus mdi-24px"></span></a>
+@section('header')
 
-                            @if ($brochures->count())
-                            <div class="table-responsive">
-                                <table  class="table table-hover table-bordered" id="barang-table" class="table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            {{-- <th>ID</th> --}}
-                                            <th>Judul Brosur</th>
-                                            {{-- <th>File</th> --}}
-                                            <th >Edit | Hapus | Download</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($brochures as $brochure)
-                                            <tr>
-                                                {{-- <td>{{ $brochure->id }}</td> --}}
-                                                <td align="center">{{ $brochure->title }}</td>
-                                                {{-- <td>{{ $brochure->file_path }}</td> --}}
-                                                
-                                                <td>
-                                                    <a href="{{ route('brochures.edit', $brochure->id) }}" class="btn btn-warning btn-sm"><span class="mdi mdi-pencil-box mdi-18"></span></a>
-                                                    <form action="{{ route('brochures.destroy', $brochure->id) }}" method="POST"
-                                                        style="display: inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                            onclick="return confirm('Are you sure?')"><span class="mdi mdi-delete mdi-18px"></span></button>
-                                                    </form>
-                                                    <a href="{{ route('brochures.download', $brochure->id) }}" class="btn btn-primary btn-sm"><span class="mdi mdi-cloud-download mdi-18px"></span></a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            @else
-                                <p>No brochures available.</p>
-                            @endif
+<!-- App Header -->
+<div class="appHeader bg-purple text-light">
+    <div class="left">
+        <a href="/home" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">BROSUR</div>
+    <div class="right"></div>
+</div>
+<!-- * App Header -->
+</div>
 @endsection
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
-<!-- Add DataTables.js JS -->
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
 
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="search-bar">
+                        <form id="searchForm" action="{{ route('brochures.index') }}" method="GET">
+                            <div class="input-group">
+                                <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search Brosur" value="{{ request()->input('search') }}">
+                                <input type="hidden" name="user_id" id="userIdInput" value="{{ auth()->user()->id }}">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                @if (session('success'))
+                    <div id="toast-12" class="toast-box toast-center show">
+                        <div class="in">
+                            <ion-icon name="checkmark-circle" class="text-success"></ion-icon>
+                            <div class="text">
+                                {!! session('success') !!}
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-text-light close-button">TUTUP</button>
+                    </div>
+                @endif
+
+                <div id="brochureContainer">
+                    @include('brochures.partials.brochure_list')
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
+
+<div class="fab-button animate bottom-right dropdown" style="margin-bottom:50px">
+    <a href="#" class="fab bg-primary" data-toggle="dropdown">
+        <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+    </a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item bg-primary" href="{{ route('brochures.create') }}">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+            <p>Brosur</p>
+        </a>
+    </div>
 </div>
-</div>
-</div>
+
+<script>
+    $(document).ready(function() {
+        // Function to load initial data
+        function loadInitialData() {
+            var userId = $('#userIdInput').val();
+
+            // Show the loading spinner
+            $('#brochureContainer').html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+
+            $.ajax({
+                url: '{{ route("brochures.index") }}',
+                type: 'GET',
+                data: {
+                    user_id: userId
+                },
+                success: function(response) {
+                    $('#brochureContainer').html(response);
+                }
+            });
+        }
+
+        // Call loadInitialData function when page loads
+        loadInitialData();
+
+        // Function to handle search input
+        var delayTimer;
+        $('#searchInput').on('keyup', function() {
+            clearTimeout(delayTimer);
+            var searchQuery = $(this).val();
+            var userId = $('#userIdInput').val();
+
+            // Show the loading spinner
+            $('#brochureContainer').html('<div class="loading-data" role="status"><span class="sr-only">Loading...</span></div>');
+
+            delayTimer = setTimeout(function() {
+                $.ajax({
+                    url: '{{ route("brochures.index") }}',
+                    type: 'GET',
+                    data: {
+                        search: searchQuery,
+                        user_id: userId
+                    },
+                    success: function(response) {
+                        $('#brochureContainer').html(response);
+                    }
+                });
+            }, 500); // Delay the request to avoid sending too many requests
+        });
+    });
+</script>
+
+@endsection

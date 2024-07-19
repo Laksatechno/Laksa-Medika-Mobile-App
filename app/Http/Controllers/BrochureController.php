@@ -7,11 +7,32 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Brochure;
 class BrochureController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $brochures = Brochure::all();
+    //     return view('brochures.index', compact('brochures'));
+    // }
+
+    public function index(Request $request)
     {
-        $brochures = Brochure::all();
+        $search = $request->input('search');
+    
+        $query = Brochure::query();
+    
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+    
+        $brochures = $query->get();
+    
+        if ($request->ajax()) {
+            return view('brochures.partials.brochure_list', compact('brochures'))->render();
+        }
+    
         return view('brochures.index', compact('brochures'));
     }
+    
+    
 
     public function allbrosur()
     {
@@ -39,7 +60,7 @@ class BrochureController extends Controller
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('brochures.index')->with('success', 'Brochure added successfully.');
+        return redirect()->route('brochures.index')->with('success', 'Brosur Berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -71,7 +92,7 @@ class BrochureController extends Controller
             ]);
         }
 
-        return redirect()->route('brochures.index')->with('success', 'Brochure updated successfully.');
+        return redirect()->route('brochures.index')->with('success', 'Brosur Berhasil diupdate.');
     }
 
     public function destroy($id)
@@ -80,7 +101,7 @@ class BrochureController extends Controller
         Storage::delete($brochure->file_path);
         $brochure->delete();
 
-        return redirect()->route('brochures.index')->with('success', 'Brochure deleted successfully.');
+        return redirect()->route('brochures.index')->with('success', 'Brosur Berhasil dihapus.');
     }
 
     public function download($id)

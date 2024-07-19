@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\CacheController;
 use App\Http\Controllers\BahanMentahController;
+use App\Http\Controllers\SettingAppController;
 use App\Models\Invoice;
 
 /*
@@ -43,14 +44,16 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/clear-cache', function () {
-    return view('clearCache');
-});
+Route::get('/pengaturan',[SettingAppController::class,'index'])->name('setting');
+Route::post('/clear-view-cache', [SettingAppController::class, 'clearViewCache'])->name('clear.view.cache');
+Route::post('/clear-route-cache', [SettingAppController::class, 'clearRouteCache'])->name('clear.route.cache');
+Route::post('/clear-config-cache', [SettingAppController::class, 'clearConfigCache'])->name('clear.config.cache');
+Route::post('/clear-all-cache', [SettingAppController::class, 'clearAllCache'])->name('clear.all.cache');
+Route::post('/clear-all', [SettingAppController::class, 'clearAll'])->name('clear.all');
+Route::post('/create-storage-link', [SettingAppController::class, 'StorageLink'])->name('create.storage.link');
+Route::post('/clear-logs', [SettingAppController::class, 'clearLogs'])->name('clear.logs');
 
-Route::post('/clear-view-cache', [CacheController::class, 'clearViewCache'])->name('clear.view.cache');
-Route::post('/clear-route-cache', [CacheController::class, 'clearRouteCache'])->name('clear.route.cache');
-Route::post('/clear-config-cache', [CacheController::class, 'clearConfigCache'])->name('clear.config.cache');
-Route::post('/clear-all-cache', [CacheController::class, 'clearAllCache'])->name('clear.all.cache');
+
 
 Route::get('/invoicecs', [InvoiceCustomerController::class, 'show'])->name('invoicecustomer.create');
 Route::post('/create-invoice', [InvoiceCustomerController::class, 'create']);
@@ -303,6 +306,7 @@ Route::post('/laporan-penjualan/produk/{productId}/generate-pdf', [LaporanContro
         Route::get('/{id}/print', [InvoiceCustomerController::class, 'generateInvoice'])->name('invoicecustomer.print');
         Route::get('/{id}/printnonppn', [InvoiceCustomerController::class, 'generateInvoiceNonPPN'])->name('invoicecustomer.printnonppn');
         Route::put('/{id}/update-status', [InvoiceCustomerController::class, 'updateStatus'])->name('invoicecustomer.updateStatus');
+        Route::get('/{id}/kirim', [InvoiceCustomerController::class, 'kirim'])->name('invoicecustomer.kirim');
     });
     Route::group(['prefix' => 'soal'], function () {
         Route::get('/', [SoalController::class, 'index']);
@@ -634,3 +638,5 @@ Route::group(['middleware' => ['auth', 'ceklevel:logistik']], function () {
         Route::get('/', [PengirimanController::class, 'index']);
     });
 });
+
+Route::get('/invoice/list', [HomeController::class, 'list'])->name('invoice.list');
