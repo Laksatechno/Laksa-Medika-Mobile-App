@@ -1,207 +1,148 @@
  <!-- App Header -->
-
  <div class="appHeader bg-purple text-light">
-
     <div class="left">
-
         <a href="#" class="headerButton" data-toggle="modal" data-target="#sidebarPanel">
-
             <ion-icon name="menu-outline"></ion-icon>
-
         </a>
+            <div class="pageTitle">
+        <span class="title  text-light" style="font-size: 12px;">LAKSA MEDIKA INTERNUSA</title>
 
     </div>
-
-    <div class="pageTitle">
-
-        {{-- <img src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" alt="logo" class="logo"> --}}
-
-        <!--<span class="title "> LAKSA MEDIKA </span>-->
-
-                @if(Auth::check())
-
-        @php
-
-            $userLevel = auth()->user()->level;
-
-            $title = ($userLevel == "superadmin" || $userLevel == "marketing" || $userLevel == "customer" || $userLevel =="logistik") ? "Laksa Medika" : "Getih Suru Indonesia";
-
-        @endphp
-
-        <span class="title ">{{ $title }}</title>
-
-    @endif
-
     </div>
 
 
+        <div class="dropdown" style="margin-left: 30%;">
 
-                        @if(Auth::check())
+            <a href="#" class="headerButton" data-toggle="dropdown">
 
-                        @if(auth()->user()->level=="superadmin") 
+                <ion-icon name="notifications-outline"></ion-icon>
+                <!-- badge count alert -->
+                <span class="badge badge-danger">
+                    {{ $alert->count()+$productalert+$alertppn->count()}}
+                </span>
 
-                        <!-- notification -->
+            </a>
 
-                        <li class="dropdown notification-list list-inline-item" id="notif" style="
+            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-right">
 
-                        left: 2%;>
+                <div class="dropdown-item" style="padding: 0;">
 
-                            <a class="nav-link dropdown-toggle arrow-none waves-effect" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <div class="list-group">
 
-                                <i class="mdi mdi-bell-outline noti-icon"></i>
+                        <a href="#" class="list-group-item list-group-item-action list-invoices">
 
-                                <span id="total-alert" class="badge badge-pill badge-danger noti-icon-badge">{{ $alert->count()+$productalert+$alertppn->count()}}</span>
+                            <div class="media">
 
-                            </a>
+                                <div class="media-body">
 
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg px-1">
+                                    <div class="text-truncate">
 
-                                <ul class="nav nav-tabs">
+                                        <strong>Order</strong>
 
-                                    <li class="nav-item list-product">
+                                    </div>
 
-                                        <a class="nav-link" aria-current="page" href="#">Produk
-
-                                            <span id="product-alert" class=" badge badge-pill badge-danger">{{$productalert}}</span>
-
-                                        </a>
-
-                                    </li>
-
-                                    <li class="nav-item list-invoices">
-
-                                        <a class="nav-link" href="#">Invoice
-
-                                            <span id="invoices-alert" class="badge badge-pill badge-danger">{{$alert->count()}}</span>
-
-                                        </a>
-
-                                    </li>
-
-                                    <li class="nav-item list-invoicesppn">
-
-                                        <a class="nav-link" href="#">Invoice PPN
-
-                                            <span id="invoicesppn-alert" class="badge badge-pill badge-danger">{{$alertppn->count()}}</span>
-
-                                        </a>
-
-                                    </li>
-
-                                </ul>
-
-                                <div class="order-notification" style="overflow: auto; max-height:450px; ">
-
-                                <!-- All-->
-
-                               
+                                </div>
 
                             </div>
 
-                        </li>
+                        </a>
 
-                    @endif
+                        <a href="#" class="list-group-item list-group-item-action list-invoicesppn">
 
-                    @endif
+                            <div class="media">
+
+                                <div class="media-body">
+
+                                    <div class="text-truncate">
+
+                                        <strong>Order PPN</strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                        <a href="#" class="list-group-item list-group-item-action list-product">
+
+                            <div class="media">
+
+                                <div class="media-body">
+
+                                    <div class="text-truncate">
+
+                                        <strong>Product</strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
                         <script>
-
                             $(document).ready(function() {
-
                                 $.ajaxSetup({
-
                                     headers: {
-
                                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
                                     }
-
                                 });
-
                                 $('.list-invoices').on('click ', function() {
-
                                     $.ajax({
-
                                         url: "{{ route('notif') }}",
-
                                         type: 'get',
-
                                         dataType: 'html',
-
                                         success: function(data) {
-
                                             console.log(data)
-
                                             $('.order-notification').html(data);
-
                                         }
-
                                     })
-
                                 });
 
                                 $('.list-invoicesppn').on('click ', function() {
-
                                     $.ajax({
-
                                         url: "{{ route('notif.ppn') }}",
-
                                         type: 'get',
-
                                         dataType: 'html',
-
                                         success: function(data) {
-
                                             console.log(data)
-
                                             $('.order-notification').html(data);
-
                                         }
-
                                     })
-
                                 });
 
                                 $('.list-product').on('click ', function() {
-
                                     $.ajax({
-
                                         url: "{{ route('notif.product') }}",
-
                                         type: 'get',
-
                                         dataType: 'html',
-
                                         success: function(data) {
-
                                             console.log(data)
-
                                             $('.order-notification').html(data);
-
                                         }
-
                                     })
-
                                 });
 
-                            
 
                                 $('#notif').click(function() {
-
                                     $('#notif').toggleClass('show')
-
                                 })
 
                                 $('.nav-item').click(function(e) {
-
                                     e.stopPropagation();
-
                                     $('.nav-link').removeClass('active')
-
                                     $(this).children('.nav-link').addClass('active')
-
-                                    
-
                                 })
 
                                 // Fungsi untuk menyembunyikan dropdown saat diklik di luar
@@ -246,6 +187,8 @@
 
            @endif --}}
 
+           
+
            @if(empty(Auth::user()->foto))
 
            <img src="{{ URL::asset('asset/img/avatar.png') }}" alt="avatar" class="imaged w32 rounded">
@@ -258,67 +201,34 @@
 
 
 
-           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                @guest
+                    @if (Route::has('login'))
+                        <a class="dropdown-item" href="{{ route('login') }}">
+                            <i class="mdi mdi-login"></i> {{ __('Login') }}
+                        </a>
+                    @endif
+                @else
+                    <div class="dropdown-divider"></div>
 
+                    <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <ion-icon size="small" name="log-out-outline"></ion-icon> {{ __('Logout') }}
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @endguest
+
+            </div>
             
-
-            @guest
-
-            @if (Route::has('login'))
-
-            <a class="dropdown-item" href="{{ route('login') }}"><i class="mdi mdi-login"></i>
-
-            {{ __('Login') }}
-
-            @endif                                 
-
-            </a>
-
-            @else
-
-            
-
-            <div class="dropdown-divider"></div>
-
-            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-
-             onclick="event.preventDefault();
-
-                          document.getElementById('logout-form').submit();">
-
-                          <ion-icon size="small" name="log-out-outline"></ion-icon>
-
-             {{ __('Logout') }}
-
-            </a>
-
-
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-
-             @csrf
-
-             </form>
-
-             @endguest  
-
-
-
-
-
-             
-
-        </div>
-
           </div>
-
         </div>
 
     </div>
 
         <div class="progress" style="display:none;position:absolute;top:50px;z-index:4;left:0px;width: 100%">
 
-            <div id="progressBar" class="progress-bar progress-bar-striped bg-dark" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            <div id="progressBar" class="progress-bar progress-bar-striped bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
 
                 <span class="sr-only">0%</span>
 
@@ -390,7 +300,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="home-outline"></ion-icon>
 
@@ -404,7 +314,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="cube"></ion-icon>
 
@@ -422,7 +332,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                               <ion-icon name="calendar-outline"></ion-icon>
 
@@ -440,7 +350,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="document-text-outline"></ion-icon>
 
@@ -458,7 +368,7 @@
 
                         <a href="{{ url('/user') }}" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="person-outline"></ion-icon>
 
@@ -474,52 +384,32 @@
 
                         <a href="{{ url('/slider') }}" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="person-outline"></ion-icon>
-
                             </div>
-
                                 Slider
-
                         </a>
-
                     </li>
 
                     <li>
-
-                        <a href="{{ url('/clear-cache') }}" class="item">
-
-                            <div class="icon-box bg-dark">
-
-                                <ion-icon name="person-outline"></ion-icon>
-
+                        <a href="{{ url('/pengaturan') }}" class="item">
+                            <div class="icon-box bg-purple">
+                                <ion-icon name="settings-outline"></ion-icon>
                             </div>
-
-                                Clear Cache
-
+                                Pengaturan
                         </a>
-
                     </li>
-
-
-
                     </li>
 
                     <li>
 
                         <a href="{{ route('logout') }}" method="POST" class="item" >
-
-                            <div class="icon-box bg-dark">
-
+                            <div class="icon-box bg-purple">
                                 <ion-icon name="log-out-outline"></ion-icon>
-
                             </div>
-
                                 Keluar
-
                         </a>
-
                     </li>
 
                     @elseif(auth()->user()->level=="admin")
@@ -528,7 +418,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="document-text-outline"></ion-icon>
 
@@ -550,7 +440,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="document-text-outline"></ion-icon>
 
@@ -570,7 +460,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="home-outline"></ion-icon>
 
@@ -628,7 +518,7 @@
 
                         <a href="{{ route('invoicecustomer.store') }}" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="document-text-outline"></ion-icon>
 
@@ -646,7 +536,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="home-outline"></ion-icon>
 
@@ -660,7 +550,7 @@
 
                         <a href="{{ url('/daftar-barang') }}" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="hammer-outline"></ion-icon>
 
@@ -676,7 +566,7 @@
 
                         <a href="#" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="home-outline"></ion-icon>
 
@@ -690,7 +580,7 @@
 
                         <a href="{{ url('/daftar-barang') }}" class="item">
 
-                            <div class="icon-box bg-dark">
+                            <div class="icon-box bg-purple">
 
                                 <ion-icon name="hammer-outline"></ion-icon>
 

@@ -1,24 +1,17 @@
 <!-- ///////////// Js Files ////////////////////  -->
 
     <!-- Jquery -->
+    {{-- <script src="{{ URL::asset('assets/js/lib/jquery-3.4.1.min.js')}}"></script> --}}
+    <script src="{{ URL::asset('assets/js/lib/sweetalert.js')}}"></script>
 
+    <script src="{{ asset('assets/js/lib/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib/select2.js') }}"></script>
     
-
-    <script src="{{ URL::asset('asset/js/lib/jquery-3.4.1.min.js')}}"></script>
-    <script src="{{ URL::asset('asset/js/lib/sweetalert.js')}}"></script>
     <!-- Bootstrap-->
 
-    <script src="{{ URL::asset('asset/js/lib/popper.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/js/lib/popper.min.js')}}"></script>
 
-    <script src="{{ URL::asset('asset/js/lib/bootstrap.min.js')}}"></script>
-
-    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css"> --}}
-
-
-
-
-
-</head>
+    <script src="{{ URL::asset('assets/js/lib/bootstrap.min.js')}}"></script>
 
     <!-- Ionicons -->
 
@@ -28,13 +21,13 @@
 
     <!-- Owl Carousel -->
 
-    {{-- <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script> --}}
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 
-    <script src="{{ URL::asset('asset/js/plugins/owl-carousel/owl.carousel.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/js/plugins/owl-carousel/owl.carousel.min.js')}}"></script>
 
     <!-- jQuery Circle Progress -->
 
-    <script src="{{ URL::asset('asset/js/plugins/jquery-circle-progress/circle-progress.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/js/plugins/jquery-circle-progress/circle-progress.min.js')}}"></script>
 
     {{-- <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 
@@ -44,15 +37,16 @@
 
         <!-- Add DataTables.js JS -->
 
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    {{-- <script type="text/javascript" src="{{ URL::asset('assets/DataTables/DataTables/js/jquery.dataTables.min.js')}}"></script>
 
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="{{ URL::asset('assets/DataTables/DataTables/js/dataTables.bootstrap4.min.js')}}"></script> --}}
 
-    <script type="text/javascript" src="{{ URL::asset('asset/DataTables/DataTables/js/jquery.dataTables.min.js')}}"></script>
+    {{-- <script type="text/javascript" src="{{ URL::asset('assets/DataTables/DataTables/js/jquery.dataTables.min.js')}}"></script> --}}
 
     <!-- Base Js File -->
 
-    <script src="{{ URL::asset('asset/js/base.js')}}"></script>
+    <script src="{{ URL::asset('assets/js/base.js')}}"></script>
 
-    <script type="text/javascript" src="{{ URL::asset('service-worker.js')}}"></script>
-
+    {{-- <script type="text/javascript" src="{{ URL::asset('service-worker.js')}}"></script> --}}
+    
+    

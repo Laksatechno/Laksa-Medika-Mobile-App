@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\Invoice_customer;
 use App\Models\Invoice_customer_detail;
@@ -10,8 +11,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Product_customer_detail;
+use App\Models\Pengiriman;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -36,7 +39,16 @@ class InvoiceCustomerController extends Controller
 
     public function save(Request $request)
     {
- 
+            // Cek terlebih dahulu apakah ada entri dengan status 'Menunggu Pembayaran' berdasarkan user_id
+            $waitingPayment = Invoice_customer::where('status', 'Menunggu Pembayaran')
+                                            ->where('user_id', Auth::user()->id)
+                                            ->first();
+
+            if ($waitingPayment) {
+                // Jika ada, return ke view 'home' dengan error
+                return redirect()->route('home')->with(['error' => 'Ada transaksi yang sedang menunggu pembayaran. Silahkan lakukan pembayaran terlebih dahulu. Atau Hubungi Admin.']);
+            }
+
             $latestInvoiceCustomer = Invoice_customer::orderBy('no_faktur', 'DESC')->select('no_faktur')->first();
 
             // Calculate the new invoice number
@@ -64,15 +76,15 @@ class InvoiceCustomerController extends Controller
 
     public function create(Request $request)
     {
-        // Your existing logic for determining the invoice number
+        // Logic existing untuk menentukan nomor faktur
         $invoicecustomer = Invoice_customer::orderBy('no_faktur', 'DESC')->select('no_faktur')->first();
         if (empty($invoicecustomer)) {
             $id = 1;
         } else {
             $id = $invoicecustomer->no_faktur + 1;
-        
         }
-        // Create the Invoice_customer record
+    
+        // Buat record Invoice_customer
         $invoicecustomer = Invoice_customer::create([
             'user_id' => Auth::user()->id,
             'total' => $request->total,
@@ -80,13 +92,13 @@ class InvoiceCustomerController extends Controller
             'ppn' => Auth::user()->jenis_institusi,
             'marketing' => Auth::user()->marketing,
             'no_faktur' => $id,
-            
-            // Add other fields as needed
+            // Tambahkan field lain yang diperlukan
         ]);
-
-        // Redirect or do something else after creating the invoice
+    
+        // Redirect atau lakukan sesuatu setelah membuat invoice
         return redirect()->route('invoice_show', ['id' => $invoicecustomer->id]);
     }
+    
 
     public function show($id)
     {
@@ -381,7 +393,20 @@ public function updateStatus(Request $request, $id)
         return redirect()->back()->with('success', 'Status updated successfully.');
     }
 
-
+    //function kirim
+    public function kirim($id)
+    {
+        $invoicecustomer = Invoice_customer::findOrFail($id);
+        $pengiriman = new Pengiriman();
+        $pengiriman->invoice_id = $invoicecustomer->id;
+        $pengiriman->invoice_detail_id = $invoicecustomer->invoice_customer_detail_id;
+        $pengiriman->product_detail_id = $invoicecustomer->product_customer_detail_id;
+        $pengiriman->status = 'Disetujui';
+        dd ($pengiriman);
+        $pengiriman->save();
+        
+        return redirect()->back()->with(['success' => 'Faktur telah dikirim']);
+    }
 }
 
 

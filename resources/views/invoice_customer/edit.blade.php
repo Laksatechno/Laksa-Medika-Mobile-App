@@ -68,7 +68,6 @@
                                 </table>
                             </div> --}}
                      
-                            
                             <div class="col-md-6">
                                 <form id="checkoutForm" action="{{ route('invoicecustomer.update', ['id' => $invoicecustomers->id]) }}" method="post">
                                     @csrf

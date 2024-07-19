@@ -74,10 +74,10 @@
                                             <h5>Total : {{ $invoicecustomers->total_price }}<br>
                                                 Rekening BCA <br>a.n PT LAKSA</h5>
                                                 <h5 id="rekeningText"  >
-                                                    <span id="copyText" value = "037-479-6000" onclick="copyToClipboard()">037-479-6000</span>
+                                                    <span id="copyText" value = "037-479-6000" onclick="copyToClipboard()"></span>
                                                 </h5>
                                                 {{-- <input type="text" value="037-479-6000" id="myInput" readonly> --}}
-                                                <button onclick="myFunction()">SALIN <ion-icon name="copy-outline"></ion-icon></button>
+                                                <button class="btn btn-secondary btn-sm" onclick="myFunction()">037-479-6000 SALIN <ion-icon name="copy-outline"></ion-icon></button>
                                             <!-- Add your form for uploading photo and updating payment status here -->
                                             <form action="{{ route('invoicecustomer.payment', $invoicecustomers->id) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
@@ -86,8 +86,12 @@
                                                     <label for="photo">Upload Bukti Pembayaran</label>
                                                     <input type="file" class="form-control" id="photo" name="photo">
                                                 </div> --}}
-                                                <input type="file" style= "margin-top: 20px;" class="form-control" id="photo" name="photo" onchange="previewImage(this)">
-                                                <img id="preview" src="#" alt="Preview" style="max-width: 50%; margin-top: 5px; display: none; margin-left: auto; margin-right: auto;">
+                                                <div class="custom-file-upload" id="fileUpload1" style="display: absolute;">
+                                                    <input type="file" name="photo" id="fileuploadInput" accept=".png, .jpg, .jpeg,">
+                                                    <label for="fileuploadInput">
+                                                        <span class="mdi mdi-upload" id ="fileuploadIcon">Upload Foto Bukti Pembayaran<br></span><br>
+                                                    </label>
+                                                </div></br>
                                                 {{-- <div class="form-group">
                                                     <label for="status">Status Pembayaran</label>
                                                     <select class="form-control" id="status" name="status">
@@ -119,13 +123,21 @@
         });
 
         function confirmSend(invoiceId) {
-        if (confirm("Apakah Anda yakin ingin mengirim bukti pembayaran?")) {
-            // If user clicks "Ya", submit the form
-            document.getElementById("paymentForm" + invoiceId).submit();
-        } else {
-            // If user clicks "Tidak", do nothing
-            return false;
-        }
+        Swal.fire({
+            title: 'Apakah Anda yakin ingin mengirim bukti pembayaran?',
+            text: "Anda tidak dapat membatalkan tindakan ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Only submit the form if user clicks "Ya"
+                document.getElementById("paymentForm" + invoiceId).submit();
+            }
+        });
     }
             function myFunction() {
             // Get the text field

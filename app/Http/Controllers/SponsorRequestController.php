@@ -64,7 +64,10 @@ class SponsorRequestController extends Controller
 public function index()
 {
     $requests = SponsorRequest::all();
-    return view('sponsor_request.index', compact('requests'));
+
+    //tampilkan data sponsor berdasarkan id user
+    $sponsor = SponsorRequest::where('user_id', Auth::id())->get();
+    return view('sponsor_request.index', compact('requests','sponsor'));
 }
 
 public function edit(SponsorRequest $sponsorRequest)

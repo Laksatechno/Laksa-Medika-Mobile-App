@@ -14,13 +14,34 @@ use Illuminate\Support\Facades\Auth;
 class PenawaranController extends Controller
 {
     //
-    public function index()
-    {
-        $penawarans = Penawaran::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->get(); // 2
-        // CODE DIATAS SAMA DENGAN > select * from `products` order by `created_at` desc 
-        return view('penawaran.index', compact('penawarans')); // 3
-    }
+    // public function index()
+    // {
+    //     $penawarans = Penawaran::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->get(); // 2
+    //     // CODE DIATAS SAMA DENGAN > select * from `products` order by `created_at` desc 
+    //     return view('penawaran.index', compact('penawarans')); // 3
+    // }
 
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $userId = $request->input('user_id');
+    
+        $query = Penawaran::where('user_id', $userId);
+    
+        if (!empty($search)) {
+            $query->where('customer', 'like', '%' . $search . '%');
+        }
+    
+        $penawarans = $query->paginate(10);
+    
+        if ($request->ajax()) {
+            return view('penawaran.partials.penawaran_list', compact('penawarans'))->render();
+        }
+    
+        return view('penawaran.index', compact('penawarans'));
+    }
+    
+    
     public function allpenawaran()
     {
         $penawarans = Penawaran::orderBy('created_at', 'DESC')->get(); // 2
@@ -92,7 +113,8 @@ class PenawaranController extends Controller
                 'kondisi' => $request->kondisi,
             ]);
             //REDIRECT KEMBALI KE HALAMAN /PRODUCT DENGAN FLASH MESSAGE SUCCESS
-            return redirect()->back()->with(['success' => '<strong>' . $kondisis->kondisi . '</strong> Telah ditambah']);
+            return redirect()->back()->with(['success' => '<strong>'.'Kondisi Penawaran' . $kondisis->kondisi . '</strong> Telah ditambah']);
+            
         } catch (\Exception $e) {
             //APABILA TERDAPAT ERROR MAKA REDIRECT KE FORM INPUT
             //DAN MENAMPILKAN FLASH MESSAGE ERROR
@@ -145,7 +167,7 @@ class PenawaranController extends Controller
         $kondisis = Kondisi_penawaran::where('penawaran_id', $penawarans->id)->delete(); //QUERY KEDATABASE UNTUK MENGAMBIL DATA BERDASARKAN ID
         $hargapenawarans = Harga_penawaran::where('penawaran_id', $penawarans->id)->delete();
         $penawarans->delete(); // MENGHAPUS DATA YANG ADA DIDATABASE
-        return redirect()->back()->with(['success' => 'Penawaran telah dihapus']); // DIARAHKAN KEMBALI KEHALAMAN /product
+        return redirect()->back()->with(['success' => '<strong>' . $penawarans->customer . '</strong>' . ' Penawaran telah dihapus']); // DIARAHKAN KEMBALI KEHALAMAN /product
     }
          
     // public function printpenawaran($id)
@@ -181,19 +203,23 @@ public function printpenawaran($id)
 
     // Save or stream the PDF
     return $pdf->download($fileName);
+    
 }
 
     
-    public function cari(Request $request)
-    {
-        // menangkap data pencarian
-        $cari = $request->cari;
+//Search Bar 
 
-        // mengambil data dari table pegawai sesuai pencarian data
-        $penawarans = Penawaran::where('customer', 'like', "%" . $cari . "%")
-            ->paginate();
+public function search(Request $request)
+{
+    $search = $request->input('search');
+    // Query to filter Penawaran records based on search input
+    $penawarans = Penawaran::where('perihal', 'like', '%' . $search . '%')
+                            ->orWhere('customer', 'like', '%' . $search . '%')
+                            ->orWhere('created_at', 'like', '%' . $search . '%')
+                            ->get();
+    
+    return view('penawaran.index', compact('penawarans'));
+}
 
-        // mengirim data pegawai ke view index
-        return view('penawaran.index', compact('penawarans'));
-    }
+
 }
