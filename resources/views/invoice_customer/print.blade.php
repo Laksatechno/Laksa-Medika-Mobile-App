@@ -52,9 +52,15 @@
 <body>
     <div class="container">
         <table>
-            <caption>
-                 <img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px"><br>
-                 FAKTUR
+            <caption style="caption-side: top; text-align: center; border: none;">
+                <table style="width: 100%; border-collapse: collapse; border: none;">
+                    <tr style="border: none;">
+                        <td style="text-align: left; border: none; padding: none;">
+                            <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
+                        </td>
+                        <td style="text-align: right; border: none; font-weight: bold;">FAKTUR</td>
+                    </tr>
+                </table>
             </caption>
             <thead>
                  <tr>
@@ -75,8 +81,8 @@
                 </tr>
                 <tr>
                     <th colspan="1" align="left">Invoice <strong>#00{{ $invoicecustomer->no_faktur}}</strong></th>
-                    <th colspan="2" align="center">Jatuh Tempo : {{ $invoicecustomer->tempo->format('D, d M Y')}}</th>
-                    <th colspan="1" align="center">{{ $invoicecustomer->created_at->format('D, d M Y') }}</th>
+                    <th colspan="2" align="center">Jatuh Tempo : {{ \Carbon\Carbon::parse($invoicecustomer->tempo)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
+                    <th colspan="1" align="center">{{ \Carbon\Carbon::parse($invoicecustomer->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
                     <th colspan="1">Marketing#{{ $invoicecustomer->marketing }}</th>
                 </tr>
             </thead>
@@ -137,7 +143,7 @@
             <thead>
                 <tr>
                     <th colspan="5">
-                    <img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px">
+                        <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
                     <p align="right">
                         Pelem Lor No. 50 Baturetno, Banguntapan<br>
                         Bantul, DI. Yogyakarta. Telp/Fax +622742842046
@@ -159,8 +165,8 @@
                 <tr>
                     <td align="center" scope="row">{{ $no }}</td>
                     <td align="center">00{{ $invoicecustomer->no_faktur}}</td>
-                    <td align ="center">{{ $invoicecustomer->created_at->format('D, d M Y') }}</td>
-                    <td align ="center">{{ $invoicecustomer->tempo->format('D, d M Y')}}</td>
+                    <td align ="center">{{ \Carbon\Carbon::parse($invoicecustomer->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</td>
+                    <td align ="center">{{ \Carbon\Carbon::parse($invoicecustomer->tempo)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</td>
                     <td align ="right">Rp {{ number_format(floor($invoicecustomer->total_price)) }}</td>
                 </tr>
                 <?php $no++ ;?>
@@ -185,7 +191,7 @@
     <div class="page_break">
         <table>
             <tr>
-                    <img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px">
+                <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
                     <p align="right">
                         Pelem Lor No. 50 Baturetno, Banguntapan<br>
                         Bantul, DI. Yogyakarta. Telp/Fax +622742842046
@@ -237,8 +243,8 @@
                     echo terbilang ($angka)." rupiah";
                     ?>
                     </b></p><hr align="right" width="80%">
-                    <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. 00{{ $invoicecustomer->no_faktur }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ $invoicecustomer->created_at->format('D, d M Y') }}</p><hr align="right" width="80%">
-                    <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;Tanggal Jatuh Tempo {{ $invoicecustomer->tempo->format('D, d M Y') }}</p><hr align="right" width="80%">
+                    <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. 00{{ $invoicecustomer->no_faktur }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ \Carbon\Carbon::parse($invoicecustomer->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</p><hr align="right" width="80%">
+                    <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;Tanggal Jatuh Tempo {{ \Carbon\Carbon::parse($invoicecustomer->tempo)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</p><hr align="right" width="80%">
                     <p style="font-size: 14px; margin:14px;">Terbilang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
                         <span><b>Rp {{ number_format(floor($invoicecustomer->total_price)) }}</b></span>
                     </p>
@@ -258,7 +264,7 @@
             <thead>
             <tr>
             <th colspan="3">
-                <img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px">
+                <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
                     <p align="right">
                         No. 00{{ $invoicecustomer->no_faktur}}/SJB/
                         <?php
@@ -318,7 +324,7 @@
             <th colspan="3">
                 <h1 align="center">SURAT KELUAR BARANG GUDANG</h1>
                 <p align="center" style="font-size: 12px;">No. 00{{ $invoicecustomer->no_faktur}}</p>
-                <p align="right" style="font-size: 12px;">{{ $invoicecustomer->created_at->format('D, d M Y') }}</h3> 
+                <p align="right" style="font-size: 12px;">{{ \Carbon\Carbon::parse($invoicecustomer->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</h3> 
             </th>
             </tr>
             </thead>

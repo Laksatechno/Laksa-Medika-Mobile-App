@@ -48,15 +48,10 @@ class InvoiceppnController extends Controller
                 'customer_id' => $request->customer_id,
                 'status' => 0,
                 'total' => 0,
-                'tenggat' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * 30)),
+                'tenggat' => $request->tenggat,
                 'tanggal' => date('Y-m-d H:i:s', time()),
                 'user_id' => Auth::user()->id,
                 'no_faktur_2023' => $id,
-
-
-
-
-
             ]);
             // Mail::to($invoiceppn->user->email)->send(new \App\Mail\PostMail($invoiceppn->customer->name, 'Laksa Medika Internusa', $invoiceppn->id));
             // Mail::to('laksatechno@gmail.com')->send(new \App\Mail\PostMail($invoiceppn->customer->name, 'Laksa Medika Internusa', $invoiceppn->id));

@@ -87,7 +87,11 @@
                                         @foreach ($invoiceppn->detailppn as $detailppn)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $detailppn->product_detail->product->title }}</td>
+                                            @if ($detailppn->product_detail && $detail->product_detail->product)
+                                            <p>{{ $detailppn->productDetail->product->name }}</p>
+                                        @else
+                                            <p>Product not found</p>
+                                        @endif
                                             <td>{{ $detailppn->qty }}</td>
                                             <td>Rp {{ number_format($detailppn->price) }}</td>
                                             <td>Rp {{ number_format($detailppn->diskon) }}</td>

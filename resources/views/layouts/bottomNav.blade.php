@@ -33,7 +33,7 @@
             <strong>Beranda</strong>
         </div>
     </a>
-    <a href="{{ url('invoice') }}" class="item{{ Request::is('invoice') ? ' active' : '' }}">
+    <a href="{{ url('salesku') }}" class="item{{ Request::is('salesku') ? ' active' : '' }}">
         <div class="col">
             <ion-icon name="calendar-outline" role="img" class="md hydrated"
                 aria-label="calendar outline"></ion-icon>

@@ -147,6 +147,8 @@
                                     <form action="{{ url('/invoice/simpan/pengiriman', ['id' => $invoice->id]) }}" method="post">
                                         @csrf
                                         <div class="form-group">
+                                            <label for="">Customer</label>
+                                            <input type="text" name="customer" class="form-control" value="{{ $invoice->customer->name }}" readonly>
                                             <br/>
                                             <label for="">Product</label>
                                             <input type="hidden" name="_method" value="PUT" class="form-control">

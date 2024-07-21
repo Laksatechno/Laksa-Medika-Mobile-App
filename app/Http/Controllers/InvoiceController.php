@@ -11,11 +11,12 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 
 use App\Models\Invoice;
+use App\Models\Invoiceppn;
 
 use App\Models\Product;
 
 use App\Models\Invoice_detail;
-
+use App\Models\Invoice_detailppn;
 use App\Models\ProductDetail;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -38,12 +39,17 @@ class InvoiceController extends Controller
     //
     public function index()
     {
-        $invoice  = Invoice::with(['user', 'customer', 'detail'])->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
-        return view('invoice.index', compact('invoice'));
+        $invoice = Invoice::with(['user', 'customer', 'detail'])
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'DESC')
+            ->get(); // Jangan menambahkan parameter ke metode get()
+            $invoiceppn  = Invoiceppn::with(['user', 'customer', 'detailppn'])
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        return view('invoice.index', compact('invoice', 'invoiceppn'));
     }
-
-
-
+    
     public function create()
 
     {
@@ -191,6 +197,22 @@ class InvoiceController extends Controller
 
     }
 
+    public function destroyppn($id)
+    {
+        $invoice = Invoiceppn::findOrFail($id);
+        $details = $invoice->details;
+
+        foreach ($details as $detail) {
+            $inventory = $detail->productDetail->product;
+            $inventory->stock += $detail->qty;
+            $inventory->save();
+            $detail->delete();
+        }
+
+        $invoice->forceDelete();
+        return redirect()->back()->with('success', 'Data has been deleted');
+    }
+
 
 
     public function status($id)
@@ -283,6 +305,7 @@ class InvoiceController extends Controller
 
         // Untuk menampilkan PDF di browser
 
+        // return $pdf->download($fileName);
         return $pdf->stream($fileName);
 
     }
@@ -311,7 +334,7 @@ class InvoiceController extends Controller
 
         // Untuk menampilkan PDF di browser
 
-        return $pdf->stream($fileName);
+        return $pdf->download($fileName);
 
     }
 
@@ -354,6 +377,7 @@ class InvoiceController extends Controller
                 Pengiriman::create([
 
                     'invoice_id' => $invoice->id,
+                    'customer' => $invoice->customer->name,
 
                     'product_detail_id' => $invoice_detail->product_detail_id,
 

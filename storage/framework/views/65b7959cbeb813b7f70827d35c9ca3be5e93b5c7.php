@@ -39,8 +39,6 @@
 
     <!-- Base Js File -->
 
-    <script src="<?php echo e(URL::asset('assets/js/base.js')); ?>"></script>
-
-    
+    <script type="text/javascript" src="<?php echo e(URL::asset('service-worker.js')); ?>"></script>
     
     <?php /**PATH D:\Laragon\Laksa Medika Mobile App\resources\views/layouts/script.blade.php ENDPATH**/ ?>
