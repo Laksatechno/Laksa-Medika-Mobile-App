@@ -26,9 +26,9 @@
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
                     @if(empty(Auth::user()->foto))
-                    <img class="img-account-profile rounded mb-2" src="{{ URL::asset('asset/img/avatar.png') }}" alt="" width="100px">
+                    <img class="img-account-profile rounded mb-2" src="{{ URL::asset('asset/img/avatar.png') }}" alt=""width="30px" height="30px">
                     @else
-                    <img class="img-account-profile rounded mb-2" src="{{ URL::asset('images/'.$user->foto) }}" alt="" width="100px">
+                    <img class="img-account-profile rounded mb-2" src="{{ URL::asset('images/'.$user->foto) }}" alt="" width="30px" height="30px"">
                     @endif
                     <!-- Profile picture help block-->
                     {{-- <div class="small font-italic text-muted mb-4">JPG atau PNG Ukuran Maksimal 5 MB</div> --}}

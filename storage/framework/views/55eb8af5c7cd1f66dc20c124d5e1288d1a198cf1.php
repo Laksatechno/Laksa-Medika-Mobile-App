@@ -108,7 +108,7 @@
                         </a>
                     </div>
                     <div class="menu-name">
-                        Kirim
+                        Pengiriman
                     </div>
                 </div>
                 <div class="item-menu text-center">
@@ -152,7 +152,7 @@
                 </div>
                 <div class="item-menu text-center">
                     <div class="menu-icon">
-                        <a href="penawaran" class="danger" style="font-size: 40px;">
+                        <a href="/penawaran" class="danger" style="font-size: 40px;">
                             <ion-icon name="trending-down-outline"></ion-icon>
                         </a>
                     </div>
@@ -177,7 +177,7 @@
                         </a>
                     </div>
                     <div class="menu-name">
-                        Kirim
+                        Pengiriman
                     </div>
                 </div>
             </div>
@@ -200,7 +200,7 @@
                 </div>
                 <div class="item-menu text-center">
                     <div class="menu-icon">
-                        <a href="penawaran" class="danger" style="font-size: 40px;">
+                        <a href="/penawaran" class="danger" style="font-size: 40px;">
                             <ion-icon name="trending-down-outline"></ion-icon>
                         </a>
                     </div>
@@ -225,9 +225,27 @@
                         </a>
                     </div>
                     <div class="menu-name">
-                        Kirim
+                        Pengirman
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <?php elseif(auth()->user()->level=="logistik"): ?>
+    <div class="section" id="menu-section">
+        <div class="card">
+            <div class="card-body text-center">
+            <div class="list-menu">
+            <div class="item-menu text-center">
+                <div class="menu-icon">
+                    <a href="pengiriman" class="orange" style="font-size: 40px;">
+                        <i class="mdi mdi-truck-delivery" style="font-size: 40px;"></i>
+                    </a>
+                </div>
+                <div class="menu-name">
+                    Kirim
+                </div>
+            </div>
             </div>
         </div>
     </div>
@@ -313,39 +331,69 @@
         </div>
     <?php endif; ?>
     <?php endif; ?>
-    <div class="menutab mt-2">
-        <div class="tab-pane fade show active" id="pilled" role="tabpanel">
-            <ul class="nav nav-tabs style1" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="bulanini-tab" data-toggle="tab" href="#bulanini" role="tab" aria-controls="bulanini" aria-selected="true">
-                        Bulan Ini
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="tahuniini-tab" data-toggle="tab" href="#tahuniini" role="tab" aria-controls="tahuniini" aria-selected="false">
-                        Tahun Ini
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="bulanini" role="tabpanel" aria-labelledby="bulanini-tab">
-                
-                <p>Laporan Order Bulan Ini </p>
+    <div class="card mt-1 card_izin" data-toggle="modal" data-target="#actionSheetIconed" ">
+        <div class="card-body" >
+            <div class="historicontent">
+                <div class="iconpresensi">
+                    <ion-icon name="trending-down-outline" style="font-size: 30px; color:rgb(237, 128, 5)"></ion-icon>
+                </div>
+                    <div class="datapenawaran">
+                        <?php if(auth()->user()->level=="superadmin"): ?>
+                        <p style="font-size: 16px;">Total PPN GUNGGUNG</p>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT($invoice)); ?></h3>
+                        <?php endif; ?>
+                        <?php if(auth()->user()->level=="admin"): ?>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoice)); ?></h3>
+                        <?php endif; ?>
+                        <?php if(auth()->user()->level=="marketing"): ?>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoice)); ?></h3>
+                        <?php endif; ?>
+                        <?php if(auth()->user()->level=="logistik"): ?>
+                        <p style="font-size: 16px;">Total Pengiriman PPN GUNGGUNG</p>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoice)); ?></h3>
+                        <?php endif; ?>
+                    </div>
+                    <div class="datapenawaran">
+
+                    </div>
             </div>
-            <div class="tab-pane fade" id="tahuniini" role="tabpanel" aria-labelledby="tahuniini-tab">
-                
-                <p>Laporan Order Tahun Ini </p>
+        </div>
+    </div>
+    <div class="card mt-1 card_izin" data-toggle="modal" data-target="#actionSheetIconed" style="margin-bottom: 70px;">
+        <div class="card-body">
+            <div class="historicontent">
+                <div class="iconpresensi">
+                    <ion-icon name="trending-down-outline" style="font-size: 30px; color:rgb(237, 128, 5)"></ion-icon>
+                </div>
+                    <div class="datapenawaran">
+                        <?php if(auth()->user()->level=="superadmin"): ?>
+                        <p style="font-size: 16px;">Outlet : </p>
+                        
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT($customers)); ?></h3>
+                        <?php endif; ?>
+                        <?php if(auth()->user()->level=="admin"): ?>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoice)); ?></h3>
+                        <?php endif; ?>
+                        <?php if(auth()->user()->level=="marketing"): ?>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoice)); ?></h3>
+                        <?php endif; ?>
+                        <?php if(auth()->user()->level=="logistik"): ?>
+                        <p style="font-size: 16px;">Total Pengiriman PPN </p>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoice)); ?></h3>
+                        <?php endif; ?>
+                    </div>
+                    <div class="datapenawaran">
+                        <?php if(auth()->user()->level=="superadmin"): ?>
+                        <p style="font-size: 16px;">Total PPN</p>
+                        <h3 style="line-height: 5px"> <?php echo e(COUNT(Auth::user()->invoiceppn)); ?></h3>
+                        <?php endif; ?>
+                    </div>
             </div>
         </div>
     </div>
 </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-
 <?php $__env->stopSection(); ?>
 
 

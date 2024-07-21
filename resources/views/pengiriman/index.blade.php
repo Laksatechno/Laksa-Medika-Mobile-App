@@ -26,9 +26,11 @@
                 </div>
                 <div class="datapenawaran">
                     <h5 style="line-height: 5px">No Invoice : {{ $item->invoice_id }}</h5>
-                    <h5 style="line-height: 5px">Customer : PMI SLEMAN</h5>
+                    <h5 style="line-height: 5px">Customer : {{ $item->customer}}</h5>
                     <!-- link text Lihat Detail -->
-                    <h5 style="line-height: 5px" id="toggleTimeline"><span class="badge badge-primary">Lihat Detail Pengiriman</span></h5>
+                    <h5 style="line-height: 5px">
+                        <span class="badge badge-primary" id="toggleTimeline{{ $item->invoice_id }}">Lihat Detail Pengiriman</span>
+                    </h5>
                 </div>
                 <div class="status">
                     <h5 style="line-height: 5px"><span class="badge badge-success">Sudah Sampai</span></h5>
@@ -36,9 +38,10 @@
             </div>
         </div>
         <!-- timeline -->
-        <div class="timeline timed" id="timeline" style="display: none;">
+        <div class="timeline timed" id="timeline{{ $item->invoice_id }}" style="display: none;">
             <div class="item">
-                <span class="time">9 Jul 14:26</span>
+                <span class="time">{{ \Carbon\Carbon::parse($item->updated_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY HH:mm') }}
+                </span>
                 <div class="dot bg-success"></div>
                 <div class="content">
                     <h4 class="title">Pesanan Sudah Sampai</h4>
@@ -46,30 +49,31 @@
                 </div>
             </div>
             <div class="item">
-                <span class="time">9 Jul 14:26</span>
+                <span class="time">{{ \Carbon\Carbon::parse($item->updated_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY HH:mm') }}
+                </span>
                 <div class="dot bg-success"></div>
                 <div class="content">
                     <h4 class="title">Pesanan dalam Pengiriman</h4>
-                    <div class="text">Pesanan sedang dalam perjalanan menuju ke PMI SLEMAN</div>
+                    <div class="text">Pesanan sedang dalam perjalanan menuju ke {{ $item->customer}}</div>
                 </div>
             </div>
             <div class="item">
-                <span class="time">8 Jul 10:23</span>
+                <span class="time">{{ \Carbon\Carbon::parse($item->updated_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY HH:mm') }}
+                </span>
                 <div class="dot bg-success"></div>
                 <div class="content">
                     <h4 class="title">Pesanan telah diserahkan ke Logistik untuk diproses</h4>
                 </div>
             </div>
             <div class="item">
-                <span class="time">7 Jul 09:58</span>
+                <span class="time">{{ \Carbon\Carbon::parse($item->updated_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY HH:mm') }}
+                </span>
                 <div class="dot bg-success"></div>
                 <div class="content">
                     <h4 class="title">Pesanan Dibuat</h4>
                     <div class="text">Invoice: {{ $item->invoice_id }} Dalam Proses Administrasi</div>
                 </div>
-                
             </div>
-            
         </div>
         <!-- * timeline -->
     </div>
@@ -78,20 +82,23 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const toggleTimeline = document.getElementById('toggleTimeline');
-        const timeline = document.getElementById('timeline');
-        
-        if (toggleTimeline && timeline) {
-            toggleTimeline.addEventListener('click', function() {
-                if (timeline.style.display === 'none') {
-                    timeline.style.display = 'block';
-                    toggleTimeline.innerHTML = '<span class="badge badge-primary">Tutup Detail Pengiriman</span>';
-                } else {
-                    timeline.style.display = 'none';
-                    toggleTimeline.innerHTML = '<span class="badge badge-primary">Lihat Detail Pengiriman</span>';
-                }
-            });
-        }
+        // Loop through each toggle element and add event listeners
+        @foreach ($pengirimans as $item)
+            const toggleTimeline{{ $item->invoice_id }} = document.getElementById('toggleTimeline{{ $item->invoice_id }}');
+            const timeline{{ $item->invoice_id }} = document.getElementById('timeline{{ $item->invoice_id }}');
+
+            if (toggleTimeline{{ $item->invoice_id }} && timeline{{ $item->invoice_id }}) {
+                toggleTimeline{{ $item->invoice_id }}.addEventListener('click', function() {
+                    if (timeline{{ $item->invoice_id }}.style.display === 'none') {
+                        timeline{{ $item->invoice_id }}.style.display = 'block';
+                        toggleTimeline{{ $item->invoice_id }}.innerHTML = '<span class="badge badge-primary">Tutup Detail Pengiriman</span>';
+                    } else {
+                        timeline{{ $item->invoice_id }}.style.display = 'none';
+                        toggleTimeline{{ $item->invoice_id }}.innerHTML = '<span class="badge badge-primary">Lihat Detail Pengiriman</span>';
+                    }
+                });
+            }
+        @endforeach
     });
 </script>
 

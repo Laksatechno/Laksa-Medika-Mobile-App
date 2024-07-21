@@ -53,9 +53,15 @@
 <body>
     <div class="container">
         <table>
-            <caption>
-                 {{-- <img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px"><br> --}}
-                 FAKTUR
+            <caption style="caption-side: top; text-align: center; border: none;">
+                <table style="width: 100%; border-collapse: collapse; border: none;">
+                    <tr style="border: none;">
+                        <td style="text-align: left; border: none; padding: none;">
+                            <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
+                        </td>
+                        <td style="text-align: right; border: none; font-weight: bold;">FAKTUR</td>
+                    </tr>
+                </table>
             </caption>
             <thead>
                  <tr>

@@ -1,3 +1,7 @@
+<?php
+// Meningkatkan batas waktu eksekusi menjadi 120 detik
+ini_set('max_execution_time', 120);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,10 +54,18 @@
 <body>
     <div class="container">
         <table>
-            <caption>
-                 <!--<img align="left" src="{{ URL::asset('img/portfolio/logo_ptlmi.png')}}" width="150px" height="30px"><br>-->
-                 FAKTUR
+            <caption style="caption-side: top; text-align: center; border: none;">
+                <table style="width: 100%; border-collapse: collapse; border: none;">
+                    <tr style="border: none;">
+                        <td style="text-align: left; border: none; padding: none;">
+                            <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
+                        </td>
+                        <td style="text-align: right; border: none; font-weight: bold;">FAKTUR</td>
+                    </tr>
+                </table>
             </caption>
+            
+            
             <thead>
                  <tr>
                     <td colspan="1" align="left">
@@ -73,8 +85,15 @@
                 </tr>
                 <tr>
                     <th colspan="1">Invoice <strong>#{{ $invoice->no_faktur_2023}}</strong></th>
-                    <th colspan="2" align="center">Jatuh Tempo :{{ $invoice->tenggat->format('D, d M Y')}}</th>
-                    <th colspan="1" align="right">{{ $invoice->created_at->format('D, d M Y') }}</th>
+                    <th colspan="2" align="center">
+                        @if ($invoice->tenggat)
+                            Jatuh Tempo : {{ \Carbon\Carbon::parse($invoice->tenggat)->locale('id_ID')->isoFormat('dddd, D MMM YYYY') }}
+                        @else
+                             COD
+                        @endif
+                    </th>
+                    
+                    <th colspan="1" align="right">{{ \Carbon\Carbon::parse($invoice->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
                     <th colspan="1">Marketing#{{ $invoice->user->name }}</th>
                 </tr>
             </thead>
@@ -82,8 +101,8 @@
         <table>
             <tbody>
                 <tr>
-                    <th align ="center">Product</th>
-                    <th align ="center">Price</th>
+                    <th align ="center">Nama </th>
+                    <th align ="center">Harga</th>
                     <th align ="center">Qty</th>
                     <th align ="center">Diskon</th>
                     <th align ="center">Subtotal</th>
@@ -124,7 +143,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="4">Total Price</th>
+                    <th colspan="4">Total Tagihan</th>
                     <td align ="right">Rp {{ number_format(floor($invoice->total_price)) }}</td>
                 </tr>
                 <tr>
@@ -158,15 +177,26 @@
                     <th align ="center">No</th>
                     <th align ="center">No Faktur</th>
                     <th align ="center">Tanggal Faktur</th>
-                    <th align ="center">Tanggal Jatuh Tempo</th>
+                    @if ($invoice->tenggat == null)
+                        <th align ="center">Status</th>
+                    @else
+                        <th align ="center">Jatuh Tempo</th>
+                    @endif
+                    {{-- <th align ="center">Tanggal Jatuh Tempo</th> --}}
                     <th align ="center">Jumlah</th>
                 </tr>
                 <?php $no=1;?>
                 <tr>
                     <td align="center" scope="row">{{ $no }}</td>
                     <td align="center">{{ $invoice->no_faktur_2023}}</td>
-                    <td align ="center">{{ $invoice->created_at->format('D, d M Y') }}</td>
-                    <td align ="center">{{ $invoice->tenggat->format('D, d M Y')}}</td>
+                    <td align ="center">{{ \Carbon\Carbon::parse($invoice->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</td>
+                    <td align="center">
+                        @if ($invoice->tenggat)
+                            {{ \Carbon\Carbon::parse($invoice->tenggat)->locale('id_ID')->isoFormat('dddd, D MMM YYYY') }}
+                        @else
+                            COD
+                        @endif
+                    </td>
                     <td align ="right">Rp {{ number_format(floor($invoice->total_price)) }}</td>
                 </tr>
                 <?php $no++ ;?>
@@ -193,8 +223,8 @@
         <table>
             <tr>
                 <h1 align="center">KWITANSI</h1>
-                <p align="center" style="font-size: 14px;">No. {{ $invoice->no_faktur_2023}}</p>
-                <p align="left" style="font-size: 14px; margin:5px">Telah Terima Dari &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;<b>{{ $invoice->customer->name }}</b></p><hr align="right" width="80%">
+                <p align="left" style="font-size: 14px; margin:5px">No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;<b>{{ $invoice->no_faktur_2023}}</b></p><hr align="right" width="70%" style="margin-left: 21%">
+                <p align="left" style="font-size: 14px; margin:5px">Telah Terima Dari &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;<b>{{ $invoice->customer->name }}</b></p><hr align="right" width="70%" style="margin-left: 21%">
                 <p align="left" style="font-size: 14px; margin:5px;">Uang Sejumlah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<b>
                 <?php 
                     function penyebut($nilai) {
@@ -238,9 +268,14 @@
                     $angka = ($invoice->total_price);
                     echo terbilang ($angka)." rupiah";
                     ?>
-                    </b></p><hr align="right" width="80%">
-                    <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. {{ $invoice->no_faktur_2023 }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ $invoice->created_at->format('D, d M Y') }}</p><hr align="right" width="80%">
-                    <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;Tanggal Jatuh Tempo {{ $invoice->tenggat->format('D, d M Y') }}</p><hr align="right" width="80%">
+                    </b></p><hr align="right"  width="70%" style="margin-left:21%">
+                    <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. {{ $invoice->no_faktur_2023 }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ \Carbon\Carbon::parse($invoice->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</p><hr align="right"  width="70%" style="margin-left:21%">
+                    <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp; 
+                        @if ($invoice->tenggat)
+                        Tanggal Jatuh Tempo{{ \Carbon\Carbon::parse($invoice->tenggat)->locale('id_ID')->isoFormat('dddd, D MMM YYYY') }}
+                        @else
+                            Status COD
+                        @endif</p><hr align="right"  width="70%" style="margin-left:21%">
                     <p style="font-size: 14px; margin:5px;">Terbilang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
                         <span><b>Rp {{ number_format(floor($invoice->total_price)) }}</b></span>
                     </p>
@@ -261,10 +296,10 @@
             <tr>
             <th colspan="3">
                 <h1 align="center">SURAT JALAN BARANG</h1>
-                <p align="center" style="font-size: 12px;">No. {{ $invoice->no_faktur_2023}}</p>
+                <p align="left" style="font-size: 12px;">INVOICE #{{ $invoice->no_faktur_2023}}</p>
                 <p align="left" style="font-size: 12px;">Telah Terima dari PT. Laksa Medika Internusa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->created_at->format('D, d M Y') }}</h3> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($invoice->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</h3> 
             </th>
             </tr>
             </thead>
@@ -309,8 +344,8 @@
             <tr>
             <th colspan="3">
                 <h1 align="center">SURAT KELUAR BARANG GUDANG</h1>
-                <p align="center" style="font-size: 12px;">No. {{ $invoice->no_faktur_2023}}</p>
-                <p align="right" style="font-size: 12px;">{{ $invoice->created_at->format('D, d M Y') }}</h3> 
+                <p align="left" style="font-size: 12px;">INVOICE # {{ $invoice->no_faktur_2023}}</p>
+                <p align="right" style="font-size: 12px;">{{ \Carbon\Carbon::parse($invoice->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</h3> 
             </th>
             </tr>
             </thead>

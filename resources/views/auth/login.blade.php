@@ -54,6 +54,14 @@
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
+                            @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
                         </div>
                     </div>
 
@@ -65,11 +73,18 @@
                                 <ion-icon name="eye-off-outline" id="show_hide_password"
                                     style="font-size: 1.5rem"></ion-icon>
                             </div>
+                            @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
 
                     <div class="form-links mt-2">
-                        <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
+                        @if (Route::has('password.request'))
+                        <div><a href="{{ route('password.request') }}" class="text-muted">{{ __('Forgot Your Password?') }}</a></div>
+                        @endif
                         <div><a href="{{ route('register') }}" class="text-muted">Register</a></div>
                     </div>
 

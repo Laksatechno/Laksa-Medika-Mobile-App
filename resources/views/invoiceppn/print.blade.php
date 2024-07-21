@@ -1,3 +1,7 @@
+<?php
+// Meningkatkan batas waktu eksekusi menjadi 120 detik
+ini_set('max_execution_time', 120);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,11 +56,15 @@
 <body>
     <div class="container">
         <table>
-            <caption>
-                 <!--<img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px"><br>-->
-                 <img align="left" src="{{ URL::asset('assets/images/ptlmi.jpg')}}" width="185px" height="30px"><br>
-                 
-                 FAKTUR
+            <caption style="caption-side: top; text-align: center; border: none;">
+                <table style="width: 100%; border-collapse: collapse; border: none;">
+                    <tr style="border: none;">
+                        <td style="text-align: left; border: none; padding: none;">
+                            <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp') }}" width="150px" height="30px">
+                        </td>
+                        <td style="text-align: right; border: none; font-weight: bold;">FAKTUR</td>
+                    </tr>
+                </table>
             </caption>
             <thead>
                  <tr>
@@ -77,8 +85,8 @@
                 </tr>
                 <tr>
                     <th colspan="1" align="left">Invoice <strong>#00{{ $invoiceppn->no_faktur_2023}}</strong></th>
-                    <th colspan="2" align="center">Jatuh Tempo :{{ $invoiceppn->tenggat->format('D, d M Y')}}</th>
-                    <th colspan="1" align="right">{{ $invoiceppn->created_at->format('D, d M Y') }}</th>
+                    <th colspan="2" align="center">Jatuh Tempo :{{ \Carbon\Carbon::parse($invoiceppn->tenggat)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
+                    <th colspan="1" align="right">{{ \Carbon\Carbon::parse($invoiceppn->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
                     <th colspan="1">Marketing#{{ $invoiceppn->user->name }}</th>
                 </tr>
             </thead>
@@ -94,7 +102,14 @@
                 </tr>
                 @foreach ($invoiceppn->detailppn as $row)
                 <tr>
-                    <td>{{ $row->product_detail->product->title }}</td>
+                    <td>
+                        @if ($row->product_detail && $row->product_detail->product)
+                            {{ $row->product_detail->product->title }}
+                        @else
+                            Data tidak tersedia
+                        @endif
+                    </td>
+                    
                     <td align ="right">Rp {{ number_format($row->price) }}</td>
                     <td align ="center">{{ $row->qty }}</td>
                     <td align ="right">Rp {{ number_format($row->diskon) }}</td>
@@ -142,7 +157,7 @@
                 <tr>
                     <th colspan="5">
                     <!--<img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px">-->
-                    <img align="left" src="{{ URL::asset('assets/images/ptlmi.jpg')}}" width="185px" height="30px"><br>
+                    <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp')}}" width="185px" height="30px"><br>
                     <p align="right">
                         Pelem Lor No. 50 Baturetno, Banguntapan<br>
                         Bantul, DI. Yogyakarta. Telp/Fax +622742842046
@@ -191,7 +206,7 @@
         <table>
             <tr>
                     <!--<img align="left" src="{{ URL::asset('assets/images/logo_ptlmi.png')}}" width="150px" height="30px">-->
-                    <img align="left" src="{{ URL::asset('assets/images/ptlmi.jpg')}}" width="185px" height="30px"><br>
+                    <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp')}}" width="185px" height="30px"><br>
 
                     <p align="right">
                         Pelem Lor No. 50 Baturetno, Banguntapan<br>
@@ -244,8 +259,8 @@
                     echo terbilang ($angka)." rupiah";
                     ?>
                     </b></p><hr align="right" width="80%">
-                    <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. 00{{ $invoiceppn->no_faktur_2023 }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ $invoiceppn->created_at->format('D, d M Y') }}</p><hr align="right" width="80%">
-                    <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;Tanggal Jatuh Tempo {{ $invoiceppn->tenggat->format('D, d M Y') }}</p><hr align="right" width="80%">
+                    <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. 00{{ $invoiceppn->no_faktur_2023 }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ \Carbon\Carbon::parse($invoiceppn->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</p><hr align="right" width="80%">
+                    <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;Tanggal Jatuh Tempo {{ \Carbon\Carbon::parse($invoiceppn->tenggat)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</p><hr align="right" width="80%">
                     <p style="font-size: 14px; margin:14px;">Terbilang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
                         <span><b>Rp {{ number_format(floor($invoiceppn->total_price)) }}</b></span>
                     </p>
@@ -267,7 +282,7 @@
             <th colspan="3">
                 
                 <!--<img align="left" src="{{ URL::asset('assets/images/ptlmi.jpg')}}" width="150px" height="30px">-->
-                <img align="left" src="{{ URL::asset('assets/images/ptlmi.jpg')}}" width="185px" height="30px"><br>
+                <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp')}}" width="185px" height="30px"><br>
                     <p align="right">
                         No. 00{{ $invoiceppn->no_faktur_2023}}/SJB/
                         <?php
@@ -294,7 +309,14 @@
                 @foreach ($invoiceppn->detailppn as $no=>$row)
                 <tr>
                     <td align="center" scope="row">{{ $no+1 }}</td>
-                    <td>{{ $row->product_detail->product->title }}</td>
+                    <td>
+                        @if ($row->product_detail && $row->product_detail->product)
+                            {{ $row->product_detail->product->title }}
+                        @else
+                            Data tidak tersedia
+                        @endif
+                    </td>
+                    
                      <td align ="center">{{ $row->qty }}</td>
                 </tr>
                 @endforeach
@@ -327,7 +349,7 @@
             <th colspan="3">
                 <h1 align="center">SURAT KELUAR BARANG GUDANG</h1>
                 <p align="center" style="font-size: 12px;">No. 00{{ $invoiceppn->no_faktur_2023}}</p>
-                <p align="right" style="font-size: 12px;">{{ $invoiceppn->created_at->format('D, d M Y') }}</h3> 
+                <p align="right" style="font-size: 12px;">{{ \Carbon\Carbon::parse($invoiceppn->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</h3> 
             </th>
             </tr>
             </thead>
@@ -340,7 +362,14 @@
                 @foreach ($invoiceppn->detailppn as $e=>$row)
                 <tr>
                     <td align="center" scope="row">{{ $e+1 }}</td>
-                    <td>{{ $row->product_detail->product->title }}</td>
+                    <td>
+                        @if ($row->product_detail && $row->product_detail->product)
+                            {{ $row->product_detail->product->title }}
+                        @else
+                            Data tidak tersedia
+                        @endif
+                    </td>
+                    
                      <td align ="center">{{ $row->qty }}</td>
                 </tr>
                 @endforeach

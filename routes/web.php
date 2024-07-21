@@ -22,6 +22,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\PengirimanController;
+use App\Http\Controllers\SaleskuController;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\CacheController;
@@ -53,7 +54,7 @@ Route::post('/clear-all', [SettingAppController::class, 'clearAll'])->name('clea
 Route::post('/create-storage-link', [SettingAppController::class, 'StorageLink'])->name('create.storage.link');
 Route::post('/clear-logs', [SettingAppController::class, 'clearLogs'])->name('clear.logs');
 
-
+Route::get('/salesku', [SaleskuController::class, 'index'])->name('salesku.index');
 
 Route::get('/invoicecs', [InvoiceCustomerController::class, 'show'])->name('invoicecustomer.create');
 Route::post('/create-invoice', [InvoiceCustomerController::class, 'create']);
@@ -500,10 +501,16 @@ Route::group(['middleware' => ['auth', 'ceklevel:superadmin,marketing']], functi
         Route::post('/', [InvoiceController::class, 'save'])->name('invoice.store');
         Route::get('/{id}', [InvoiceController::class, 'edit'])->name('invoice.edit');
         Route::put('/{id}', [InvoiceController::class, 'update'])->name('invoice.update');
+        Route::delete('/{id}/delete', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+        Route::delete('/{id}/delete', [InvoiceController::class, 'destroyppn'])->name('invoiceppn.destroyppn');
         Route::delete('/{id}', [InvoiceController::class, 'deleteProduct'])->name('invoice.delete_product');
         Route::get('/cari/create', [InvoiceController::class, 'cari'])->name('create.cari');
         
     });
+
+
+
+
     Route::get('/add/nondanppn', [HomeController::class, 'invoicenondanppn']);
     Route::get('/menuorder', [HomeController::class, 'invoicenondanppnapp']);
     
@@ -618,7 +625,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:superadmin,marketing,marketingc
     
 });
 
-Route::group(['middleware' => ['auth', 'ceklevel:superadmin,customer,admin']], function () {
+Route::group(['middleware' => ['auth', 'ceklevel:superadmin,customer,admin,marketing']], function () {
     Route::group(['prefix' => 'customer-order'], function () {
         Route::get('/', [InvoiceCustomerController::class, 'index']);
         Route::post('/', [InvoiceCustomerController::class, 'save'])->name('invoicecustomer.store');

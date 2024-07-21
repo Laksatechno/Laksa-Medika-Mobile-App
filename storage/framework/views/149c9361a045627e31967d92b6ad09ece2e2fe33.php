@@ -62,6 +62,21 @@ unset($__errorArgs, $__bag); ?>" name="email" value="<?php echo e(old('email'));
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
+                            <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <span class="invalid-feedback" role="alert">
+                                <strong><?php echo e($message); ?></strong>
+                            </span>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
                         </div>
                     </div>
 
@@ -73,11 +88,25 @@ unset($__errorArgs, $__bag); ?>" name="email" value="<?php echo e(old('email'));
                                 <ion-icon name="eye-off-outline" id="show_hide_password"
                                     style="font-size: 1.5rem"></ion-icon>
                             </div>
+                            <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <span class="invalid-feedback" role="alert">
+                                <strong><?php echo e($message); ?></strong>
+                            </span>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
                     </div>
 
                     <div class="form-links mt-2">
-                        <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
+                        <?php if(Route::has('password.request')): ?>
+                        <div><a href="<?php echo e(route('password.request')); ?>" class="text-muted"><?php echo e(__('Forgot Your Password?')); ?></a></div>
+                        <?php endif; ?>
                         <div><a href="<?php echo e(route('register')); ?>" class="text-muted">Register</a></div>
                     </div>
 

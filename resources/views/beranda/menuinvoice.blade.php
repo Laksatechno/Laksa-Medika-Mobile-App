@@ -88,8 +88,8 @@
                                                     <td>Rp {{ number_format($invoice->diskon) }}</td>
                                                     <td>Rp {{ number_format($invoice->total_price) }}</td>
                                                     <td>
-                                                        <a href="{{ route('invoice.print2', $invoice->id) }}" class="btn btn-success btn-sm"><i class="mdi mdi-printer"></i></a>
-                                                        <a href="{{ route('invoice.print', $invoice->id) }}" class="btn btn-secondary btn-sm"><i class="mdi mdi-printer"></i></a>
+                                                        <!--<a href="{{ route('invoice.print2', $invoice->id) }}" class="btn btn-success btn-sm"><i class="mdi mdi-printer"></i></a>-->
+                                                        <a href="{{ route('invoice.print', $invoice->id) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-printer"></i></a>
                                                     </td>
                                                     <td>
                                                         <div style="position: relative; display: inline-block;">
@@ -178,6 +178,7 @@
                                                 <tr>
                                                     <th>#INV</th>
                                                     <th>Nama</th>
+                                                    <th>Tenggat</th>
                                                     <th>Marketing</th>
                                                     <th>Qty</th>
                                                     <th>Diskon</th>
@@ -192,12 +193,19 @@
                                                 <tr>
                                                     <td><strong>{{ $invoice->no_faktur_2023 }}</strong></td>
                                                     <td>{{ $invoice->customer->name }}</td>
+                                                    <td>
+                                                        @if(is_null($invoice->tenggat))
+                                                            COD
+                                                        @else
+                                                            {{$invoice->tenggat}}
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $invoice->user->name }}</td>
                                                     <td><span class="badge badge-success">{{ $invoice->detailppn->count() }}</span></td>
                                                     <td>Rp {{ number_format($invoice->diskon) }}</td>
                                                     <td>Rp {{ number_format($invoice->total_price) }}</td>
                                                     <td>
-                                                        <a href="{{ route('invoiceppn.print', $invoice->id) }}" class="btn btn-secondary btn-sm"><i class="mdi mdi-printer"></i></a>
+                                                        <a href="{{ route('invoiceppn.print', $invoice->id) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-printer"></i></a>
                                                     </td>
                                                     <td>
                                                         <div style="position: relative; display: inline-block;">
@@ -280,13 +288,14 @@
                                                 <tr>
                                                     <th>#INV</th>
                                                     <th>Nama</th>
+                                                    <th>Tenggat</th>
                                                     <th>Qty</th>
                                                     <th>Subtotal</th>
                                                     <th>Tax</th>
                                                     <th>Total</th>
                                                     <th>Print</th>
                                                     <th>Status</th>
-                                                    <th><center>Action</center></th>
+                                                    <th><center>Aksi</center></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -294,15 +303,16 @@
                                                 <tr>
                                                     <td><strong>{{ $invoicecustomers->no_faktur }}</strong></td>
                                                     <td>{{ $invoicecustomers->user->name }}</td>
+                                                    <td>{{ $invoicecustomers->tempo }}</td>
                                                     <td><span class="badge badge-success">{{ $invoicecustomers->detail_customer->count() }} Item</span></td>
                                                     <td>Rp {{ number_format($invoicecustomers->total) }}</td>
                                                     <td>Rp {{ number_format($invoicecustomers->tax) }}</td>
                                                     <td>Rp {{ number_format($invoicecustomers->total_price) }}</td>
                                                     <td>
                                                         @if ($invoicecustomers->ppn != 0)
-                                                        <a href="{{ route('invoicecustomer.print', $invoicecustomers->id) }}" class="btn btn-secondary btn-sm"><i class="mdi mdi-printer"></i></a>
+                                                        <a href="{{ route('invoicecustomer.print', $invoicecustomers->id) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-printer"></i></a>
                                                         @else
-                                                        <a href="{{ route('invoicecustomer.printnonppn', $invoicecustomers->id) }}" class="btn btn-success btn-sm"><i class="mdi mdi-printer"></i></a>
+                                                        <a href="{{ route('invoicecustomer.printnonppn', $invoicecustomers->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-printer"></i></a>
                                                         @endif
                                                     </td>
                                                     <td><strong><a href="{{ $invoicecustomers->id }}" data-toggle="modal" data-target="#transaksiModal{{ $invoicecustomers->id }}">{{ $invoicecustomers->status }}</a></strong></td>

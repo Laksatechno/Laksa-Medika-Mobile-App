@@ -46,8 +46,10 @@
         <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/DataTables/DataTables/css/dataTables.bootstrap4.min.css')); ?>">
         <link rel="<?php echo e(asset('assets/DataTables/DataTables/datatables.min.css')); ?>">
         <link rel="<?php echo e(asset('assets/DataTables/DataTables/datatables.css')); ?>">
+        <script src="<?php echo e(URL::asset('assets/js/base.js')); ?>"></script>
 
-    
+
+    <link rel="manifest" href="__manifest.json"> 
     <style>
         .selectmaterialize {
             display: block;

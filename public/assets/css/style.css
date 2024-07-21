@@ -720,7 +720,7 @@ button:focus {
 .appBottomMenu .item.active i.icon,
 .appBottomMenu .item.active ion-icon,
 .appBottomMenu .item.active strong {
-    color: #1e74fd !important;
+    color: #592bca !important;
     font-weight: 500;
 }
 
@@ -4774,9 +4774,9 @@ textarea,
 }
 
 .nav-tabs.lined .nav-item .nav-link.active {
-    color: #1e74fd;
+    color: #592bca;
     background: transparent;
-    border-bottom-color: #1e74fd !important;
+    border-bottom-color:#592bca !important;
 }
 
 .nav-tabs.iconed i.icon,
@@ -5506,6 +5506,13 @@ textarea,
   
     height: 100%;
   
+  }
+
+  img .img-account-profile{
+
+    width: 30%;
+
+    height: 30%;
   }
   
   

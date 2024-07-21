@@ -9,7 +9,7 @@
     <style>
         body{
             font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            color:#333;
+            color:#000000;
             text-align:left;
             font-size:12px;
             margin:0;
@@ -28,14 +28,14 @@
             text-align:right;
         }
         table{
-            border:1px solid #333;
+            border:1px solid #000000;
             border-collapse:collapse;
             margin:0 auto;
             width:700px;
         }
         td, tr, th{
             padding:5px;
-            border:1px solid #333;
+            border:1px solid #000000;
             width:auto;
         }
         th{
@@ -72,8 +72,8 @@
                 </tr>
                 <tr>
                     <th colspan="1">Invoice <strong>#{{ $invoice->id}}</strong></th>
-                    <th colspan="2" align="center">Jatuh Tempo :{{ $invoice->tenggat}}</th>
-                    <th colspan="1" align="right">{{ $invoice->created_at->format('D, d M Y') }}</th>
+                    <th colspan="2" align="center">Jatuh Tempo :{{ \Carbon\Carbon::parse($invoice->tenggat)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
+                    <th colspan="1" align="right">{{ \Carbon\Carbon::parse($invoice->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</th>
                     <th colspan="1">Marketing#{{ $invoice->user->name }}</th>
                 </tr>
             </thead>

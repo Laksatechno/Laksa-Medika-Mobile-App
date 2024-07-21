@@ -33,7 +33,7 @@
             <strong>Beranda</strong>
         </div>
     </a>
-    <a href="<?php echo e(url('invoice')); ?>" class="item<?php echo e(Request::is('invoice') ? ' active' : ''); ?>">
+    <a href="<?php echo e(url('salesku')); ?>" class="item<?php echo e(Request::is('salesku') ? ' active' : ''); ?>">
         <div class="col">
             <ion-icon name="calendar-outline" role="img" class="md hydrated"
                 aria-label="calendar outline"></ion-icon>

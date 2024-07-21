@@ -45,8 +45,6 @@
 
     <!-- Base Js File -->
 
-    <script src="{{ URL::asset('assets/js/base.js')}}"></script>
-
-    {{-- <script type="text/javascript" src="{{ URL::asset('service-worker.js')}}"></script> --}}
+    <script type="text/javascript" src="{{ URL::asset('service-worker.js')}}"></script>
     
     
